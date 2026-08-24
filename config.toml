@@ -35,7 +35,7 @@
 #
 # 示例: "continuwuity.org"
 #
-#server_name =
+server_name = "92li.uk"
 
 # continuwuity 将监听的默认地址（IPv4 或 IPv6）。
 #
@@ -43,7 +43,7 @@
 #
 # 要监听多个地址，请指定一个数组，例如 ["127.0.0.1", "::1"]
 #
-#address = ["127.0.0.1", "::1"]
+address = ["0.0.0.0"]
 
 # continuwuity 将监听的端口。
 #
@@ -54,7 +54,7 @@
 #
 # 要监听多个端口，请指定一个数组，例如 [8080, 8448]
 #
-#port = 8008
+port = 443
 
 # continuwuity 将监听的 UNIX 套接字（socket）。
 #
@@ -81,7 +81,7 @@
 #
 # 示例: "/var/lib/conduwuit"
 #
-#database_path =
+database_path = "/home/li/matrix/data"
 
 # continuwuity 支持使用 RocksDB 的 Backup engine API 进行在线数据库备份。
 # 要使用此功能，请设置一个 continuwuity 具有写入权限的数据库备份路径。
@@ -116,7 +116,7 @@
 # `https://continuwuity.org/.well-known/continuwuity/announcements` 发送简单的 GET 请求，
 # 以获取任何新公告或重大更新。这不是一个更新检查端点。
 #
-#allow_announcements_check = true
+allow_announcements_check = false
 
 # 将此项设置为任何浮点值，以将其与 continuwuity 的内存 LRU 缓存相乘
 # （例如 "auth_chain_cache_capacity"）。
@@ -128,7 +128,7 @@
 # 默认情况下，像 "auth_chain_cache_capacity" 这样的独立缓存
 # 会根据您的 CPU 核心数进行缩放。
 #
-#cache_capacity_modifier = 1.0
+cache_capacity_modifier = 3.0
 
 # 将此项设置为任何浮点值（以兆字节 MB 为单位），让 continuwuity 告知
 # 数据库引擎有多少内存可用于数据库的读取缓存。
@@ -139,7 +139,7 @@
 #
 # 默认值为 128.0 + (64.0 * CPU 核心数)。
 #
-#db_cache_capacity_mb = 因系统而异
+db_cache_capacity_mb = 2048.0
 
 # 将此项设置为任何浮点值（以兆字节 MB 为单位），让 continuwuity 告知
 # 数据库引擎有多少内存可用于数据库的写入缓存。
@@ -150,7 +150,7 @@
 #
 # 默认值为 48.0 + (4.0 * CPU 核心数)。
 #
-#db_write_buffer_capacity_mb = 因系统而异
+db_write_buffer_capacity_mb = 512.0
 
 # 缓存的持久数据单元 (PDUs) 的最大数量。
 # 接受任何 32 位整数。
@@ -316,7 +316,7 @@
 # 建议将其设置为 Ipv4Only (1)，因为即使 AAAA 记录成功返回，
 # 您也永远不会使用其内容来替代 A 记录。
 #
-#ip_lookup_strategy = 5
+ip_lookup_strategy = 1
 
 # 用于获取真实客户端 IP 的首选来源。
 #
@@ -535,7 +535,7 @@
 #
 # 如果您希望仅通过令牌注册，请配置 `registration_token`。
 #
-#allow_registration = true
+allow_registration = false
 
 # 如果启用了注册，并且此设置为 true，则在第一个管理员用户之后注册的新用户将自动被挂起，
 # 并需要管理员运行 `!admin users unsuspend <user_id>` 来解除挂起。
@@ -596,11 +596,11 @@
 
 # 控制是否允许加密的房间和事件。
 #
-#allow_encryption = true
+allow_encryption = false
 
 # 控制是否允许联邦。由于潜在的联邦中断，不建议在事后禁用此项。
 #
-#allow_federation = true
+allow_federation = false
 
 # 允许向自身发出联邦请求。
 #
@@ -625,7 +625,7 @@
 # 将此项设置为 false 可防御针对 /publicRooms 的爬虫，但也将禁止外部用户查看
 # 服务器的公共房间目录。如果完全禁用了联邦（`allow_federation`），此项本质上为 false。
 #
-#allow_public_room_directory_over_federation = false
+allow_public_room_directory_over_federation = false
 
 # 将此项设置为 true 将锁定您的服务器的公共房间目录，仅允许管理员
 # 将房间发布到房间目录。启用此功能后，所有用户仍然可以取消发布。
@@ -1694,13 +1694,13 @@
 #
 # 示例: "https://matrix.example.com"
 #
-#client =
+client = "https://chat.92li.uk"
 
 # 带有特定端口，且服务器 well-known 文件将要下发的服务器基础域。这里末尾应该包含端口并且不应该是一个 URL。
 #
 # 示例: "matrix.example.com:443"
 #
-#server =
+server = "chat.92li.uk:443"
 
 # 指向服务器支持页面的 URL，将作为 MSC1929 服务器支持端点（位于 /.well-known/matrix/support）的一部分来提供。
 # 将与所有联系信息一起被包含在内。
@@ -1834,7 +1834,7 @@
 #
 #documents =
 
-#[global.oauth]
+[global.oauth]
 
 # 要使用的 OAuth 兼容模式。
 #
@@ -1842,7 +1842,7 @@
 # - "hybrid": OAuth 和传统身份验证均可用。某些客户端可能只选择使用其中一种。
 # - "exclusive": 仅 OAuth 可用。需要旧版验证的客户端将无法登录。
 #
-#compatibility_mode = "hybrid"
+compatibility_mode = "disabled"
 
 #[global.oauth.oidc]
 # 取消注释该部分将启用 Continuwuity 对使用符合 OpenID Connect 的身份提供商 (IdP) 对用户进行身份验证的支持。
