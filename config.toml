@@ -110,7 +110,7 @@ database_path = "/home/li/matrix/data"
 #
 # 示例: "🏳️‍⚧️"
 #
-#new_user_displayname_suffix = "🏳️‍⚧️"
+new_user_displayname_suffix = "❤️"
 
 # 如果启用，continuwuity 将定期向 
 # `https://continuwuity.org/.well-known/continuwuity/announcements` 发送简单的 GET 请求，
