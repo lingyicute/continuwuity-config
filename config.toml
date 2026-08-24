@@ -1,0 +1,1915 @@
+### continuwuity 配置文件
+###
+### 此文件是自动生成的。在代码仓库中的更改/贡献将被覆盖！
+###
+### 在配置您的服务器之前，您应该重命名此文件。如果需要对
+### 文档和默认值进行更改，可以在源代码 src/core/config/mod.rs 中提交贡献。
+### 此文件是在构建时生成的。
+###
+### 任何预先填充的值都是相应配置选项的默认值。
+###
+### 至少，您必须根据您的环境编辑所有标有 "YOU NEED TO EDIT THIS（您必须编辑此项）" 
+### 的配置选项。
+###
+### 更多信息，请参见：
+### https://continuwuity.org/configuration.html
+
+[global]
+
+# server_name（服务器名称）是此服务器的友好名称。它被用作
+# 用户和房间 ID/别名的后缀。
+#
+# 有关反向代理和委托的文档，请参见：
+# https://continuwuity.org/deploying/generic.html#setting-up-the-reverse-proxy
+#
+# 另请参见底部最后的 `[global.well_known]` 配置部分。
+#
+# 如果未在 `[global.well_known]` 下设置 `client`，该服务器名称将
+# 被用作 Continuwuity 创建的面向用户的链接（如密码重置链接）的基础域名。
+#
+# 委托示例：
+# - https://continuwuity.org/.well-known/matrix/server
+# - https://continuwuity.org/.well-known/matrix/client
+#
+# 您必须编辑此项。在不清除数据库的情况下，此项一旦设置无法更改。
+#
+# 示例: "continuwuity.org"
+#
+#server_name =
+
+# continuwuity 将监听的默认地址（IPv4 或 IPv6）。
+#
+# 如果您使用 Docker 或容器 NAT 网络设置，此项必须为 "0.0.0.0"。
+#
+# 要监听多个地址，请指定一个数组，例如 ["127.0.0.1", "::1"]
+#
+#address = ["127.0.0.1", "::1"]
+
+# continuwuity 将监听的端口。
+#
+# 有关反向代理，请参见：
+# https://continuwuity.org/deploying/generic.html#setting-up-the-reverse-proxy
+#
+# 如果您使用 Docker，请不要更改此项，您需要将外部端口映射到此端口。
+#
+# 要监听多个端口，请指定一个数组，例如 [8080, 8448]
+#
+#port = 8008
+
+# continuwuity 将监听的 UNIX 套接字（socket）。
+#
+# continuwuity 不能同时监听 IP 地址和 UNIX 套接字。如果
+# 监听 UNIX 套接字，您必须删除/注释掉 `address` 键。
+#
+# 请确保您的反向代理有权限访问此套接字文件，方法是将反向代理
+# 加入到相应的用户组，或者使用 `unix_socket_perms` 授予全局读写权限
+# （至少为 666）。
+#
+# 示例: "/run/continuwuity/continuwuity.sock"
+#
+#unix_socket_path =
+
+# 创建 UNIX 套接字时的默认权限（八进制）。
+#
+#unix_socket_perms = 660
+
+# 这是 continuwuity 保存其数据（包括媒体）的唯一目录。
+# 注意：这以前是 "/var/lib/matrix-conduit"。
+#
+# 您必须编辑此项，除非您将 continuwuity 作为 `systemd` 服务运行。
+# 服务文件会使用环境变量将其设置为 `/var/lib/conduwuit`，并授予写入权限。
+#
+# 示例: "/var/lib/conduwuit"
+#
+#database_path =
+
+# continuwuity 支持使用 RocksDB 的 Backup engine API 进行在线数据库备份。
+# 要使用此功能，请设置一个 continuwuity 具有写入权限的数据库备份路径。
+#
+# 如果您使用的是 systemd，您需要在服务文件的 ReadWritePaths 中添加该路径，
+# 最好通过 `systemctl edit` 创建附加文件（drop-in file）来完成。
+#
+# 更多信息，请参见：
+# https://continuwuity.org/maintenance.html#backups
+#
+# 示例: "/opt/continuwuity-db-backups"
+#
+#database_backup_path =
+
+# 如果使用了 "database_backup_path"，在删除最旧的备份之前，
+# 要保留/保存的在线 RocksDB 数据库备份数量。
+#
+#database_backups_to_keep = 1
+
+# 用户注册时将添加到其显示名称末尾的文本，文本前会有一个空格。
+# 在 Conduit 中，这是闪电表情符号。
+#
+# 要禁用，请将其设置为 ""（空字符串）。
+#
+# 默认是跨性别骄傲旗帜。
+#
+# 示例: "🏳️‍⚧️"
+#
+#new_user_displayname_suffix = "🏳️‍⚧️"
+
+# 如果启用，continuwuity 将定期向 
+# `https://continuwuity.org/.well-known/continuwuity/announcements` 发送简单的 GET 请求，
+# 以获取任何新公告或重大更新。这不是一个更新检查端点。
+#
+#allow_announcements_check = true
+
+# 将此项设置为任何浮点值，以将其与 continuwuity 的内存 LRU 缓存相乘
+# （例如 "auth_chain_cache_capacity"）。
+#
+# 如果您有大量空闲内存可用于提升性能，这可能很有用。
+#
+# 如果您的内存较小，减小此值可能是可行的。
+#
+# 默认情况下，像 "auth_chain_cache_capacity" 这样的独立缓存
+# 会根据您的 CPU 核心数进行缩放。
+#
+#cache_capacity_modifier = 1.0
+
+# 将此项设置为任何浮点值（以兆字节 MB 为单位），让 continuwuity 告知
+# 数据库引擎有多少内存可用于数据库的读取缓存。
+#
+# 如果您有大量空闲内存可用于提升性能，这可能很有用。
+#
+# 与独立的 LRU 缓存类似，这会根据您的 CPU 核心数按比例放大。
+#
+# 默认值为 128.0 + (64.0 * CPU 核心数)。
+#
+#db_cache_capacity_mb = 因系统而异
+
+# 将此项设置为任何浮点值（以兆字节 MB 为单位），让 continuwuity 告知
+# 数据库引擎有多少内存可用于数据库的写入缓存。
+#
+# 如果您有大量空闲内存可用于提升性能，这可能很有用。
+#
+# 与独立的 LRU 缓存类似，这会根据您的 CPU 核心数按比例放大。
+#
+# 默认值为 48.0 + (4.0 * CPU 核心数)。
+#
+#db_write_buffer_capacity_mb = 因系统而异
+
+# 缓存的持久数据单元 (PDUs) 的最大数量。
+# 接受任何 32 位整数。
+#
+# PDU 是从一个主服务器广播到已加入同一房间（由房间 ID 标识）的任何其他主服务器的事件。
+# 它们被持久化保存在长期存储中，记录了一个房间的消息和状态历史。
+#
+# PDU 的例子包括一条消息或加入一个房间的动作。
+#
+# 如果服务器内存容量很大，并且明显受到 I/O 限制，将其设置得更高可能有用。
+#
+# 默认值为 100,000 + (10,000 * CPU 核心数)
+#
+#pdu_cache_capacity = 因系统而异
+
+# 缓存的授权链 (auth chains) 的最大数量。
+# 接受任何 32 位整数。
+#
+# 当确定一个用户是否有权发送事件时，服务器首先会检查缓存中是否存在授权链。
+# 如果缓存中没有授权链，服务器将从数据库读取该授权链并将其添加到缓存中。
+#
+# 默认值为 100,000 + (10,000 * CPU 核心数)
+#
+#auth_chain_cache_capacity = 因系统而异
+
+# 确定 eventid 数据引用的缓存大小。
+# 接受任何 32 位整数。
+#
+# 每个 matrix 事件在数据库中可以通过 eventid (字符串) 或 shorteventid (64位整数) 引用。
+# 这限制了由 shorteventid 引用的被缓存 eventid 的容量。
+#
+# 默认值为 100,000 + (50,000 * CPU 核心数)
+#
+#shorteventid_cache_capacity = 因系统而异
+
+# 确定 eventid 数据引用的缓存大小。
+# 接受任何 32 位整数。
+#
+# 每个 matrix 事件在数据库中可以通过 eventid (字符串) 或 shorteventid (64位整数) 引用。
+# 这限制了由 eventid 引用的被缓存 shorteventid 的容量。
+#
+# 默认值为 100,000 + (25,000 * CPU 核心数)
+#
+#eventidshort_cache_capacity = 因系统而异
+
+# 确定 pdu 数据引用的缓存大小。
+# 接受任何 32 位整数。
+#
+# 这限制了由 eventid 引用的被缓存 pdu 的容量。
+#
+# 默认值为 100,000 + (25,000 * CPU 核心数)
+#
+#eventid_pdu_cache_capacity = 因系统而异
+
+# 确定状态键 (state key) 数据引用的缓存大小。
+# 接受任何 32 位整数。
+#
+# 状态键被服务器用于验证来自第三方邀请事件的令牌是否确实是由房间所在服务器生成的。
+#
+# 这些状态键在数据库中可以通过 statekey (字符串) 或 shortstatekey (64位整数) 引用。
+# 这限制了由 shortstatekeys 引用的被缓存 statekeys 的容量。
+#
+# 默认值为 100,000 + (10,000 * CPU 核心数)
+#
+#shortstatekey_cache_capacity = 因系统而异
+
+# 确定状态键 (state key) 数据引用的缓存大小。
+# 接受任何 32 位整数。
+#
+# 状态键被服务器用于验证来自第三方邀请事件的令牌是否确实是由房间所在服务器生成的。
+#
+# 这些状态键在数据库中可以通过 statekey (字符串) 或 shortstatekey (64位整数) 引用。
+# 这限制了由 statekeys 引用的被缓存 shortstatekeys 的容量。
+#
+# 默认值为 100,000 + (10,000 * CPU 核心数)
+#
+#statekeyshort_cache_capacity = 因系统而异
+
+# 确定以 server_name 为作用域的 event_data 引用的缓存大小。
+# 接受任何 32 位整数。
+#
+# 事件数据可以在数据库中通过服务器名称进行引用。
+# 例如，如果服务器需要清除与特定联邦服务器相关的所有事件，这将很有用。
+# 这限制了由 server_name 引用的被缓存 event_data 的容量。
+#
+# 默认值为 500,000 + (100,000 * CPU 核心数)
+#
+#servernameevent_data_cache_capacity = 因系统而异
+
+# 确定房间状态的缓存大小。
+# 接受任何 32 位整数。
+#
+# 为确保来自联邦服务器的异步请求的房间事件数据完整性，
+# Matrix 使用 statehash (状态哈希) 以及自上一个 (父) statehash 以来的变化来跟踪房间状态。
+# 这限制了被缓存的房间状态数据的容量。
+#
+# 默认值为 100 * CPU 核心数。
+#
+#stateinfo_cache_capacity = 因系统而异
+
+# 存储在 DNS 内存缓存中的最大条目数。一个条目的大小可能会有所不同，
+# 所以如果在过度提高此值时请注意。仅在使用外部 DNS 缓存时减小此值。
+# 请注意，即使将其配置为外部缓存，systemd-resolved 也*不*算作外部缓存。
+#
+#dns_cache_entries = 32768
+
+# DNS 缓存中条目的最小生存时间 (TTL)，以秒为单位。
+# 对大多数管理员来说，默认值似乎很高；这是有意设计的，因为大多数
+# NXDOMAIN 在很长时间内都是正确的（例如，该服务器不再运行 Matrix）。
+# 仅当您使用外部 DNS 缓存时才减小此值。
+#
+#dns_min_ttl = 10800
+
+# DNS 缓存中 NXDOMAIN 条目的最小生存时间 (TTL)，以秒为单位。
+# 此值对于服务器高效地进行联邦至关重要。
+# NXDOMAIN 被假定为不会返回联邦网络，并被积极地缓存，而不是不断地重新检查。
+#
+# 默认值为 3 天，因为这些*极少*出现假阴性。
+#
+#dns_min_ttl_nxdomain = 259200
+
+# 在超时或出错后的 DNS 域名服务器重试次数。
+#
+#dns_attempts = 10
+
+# 等待 DNS 查询回复的秒数。请注意，对于某些域名，递归查询
+# 可能长达数秒，因此此值不应过低，尤其是在较慢的硬件或解析器上。
+#
+#dns_timeout = 10
+
+# 在 DNS 错误时回退到 TCP。如果域名服务器不支持，请将其设置为 false。
+#
+#dns_tcp_fallback = true
+
+# 启用以查询所有域名服务器，直到找到域名。在 hickory_resolver 中称为 
+# "trust_negative_responses"。如果第一个域名服务器响应 NXDOMAIN 
+# 或空的 NOERROR 响应，这可以避免无用的 DNS 查询。
+#
+#query_all_nameservers = true
+
+# 启用*仅*使用 TCP（而不是 UDP）来查询您指定的域名服务器。
+#
+# 如果您在容器环境中运行 continuwuity，可能需要启用此配置选项。
+# 有关更多详细信息，请参见：
+# https://continuwuity.org/troubleshooting.html#potential-dns-issues-when-using-docker
+#
+#query_over_tcp_only = false
+
+# DNS A/AAAA 记录查找策略
+#
+# 接受以下选项之一的数字：
+# 1 - Ipv4Only (只查询 A 记录，不查 AAAA/IPv6)
+#
+# 2 - Ipv6Only (只查询 AAAA 记录，不查 A/IPv4)
+#
+# 3 - Ipv4AndIpv6 (并行查询 A 和 AAAA 记录，使用最先返回成功响应的记录)
+#
+# 4 - Ipv6thenIpv4 (查询 AAAA 记录，如果失败则查询 A 记录)
+#
+# 5 - Ipv4thenIpv6 (查询 A 记录，如果失败则查询 AAAA 记录)
+#
+# 如果您没有 IPv6 网络，那么为了获得更好的 DNS 性能，
+# 建议将其设置为 Ipv4Only (1)，因为即使 AAAA 记录成功返回，
+# 您也永远不会使用其内容来替代 A 记录。
+#
+#ip_lookup_strategy = 5
+
+# 用于获取真实客户端 IP 的首选来源。
+#
+# 接受以下任何选项：
+#
+# "cf_connecting_ip" - `Cf-Connecting-Ip` 请求头
+# "cloudfront_viewer_address" - `CloudFront-Viewer-Address` 请求头
+# "fly_client_ip" - `Fly-Client-IP` 请求头
+# "x_forwarded_for" - `X-Forwarded-For` 请求头的最右侧值
+# "true_client_ip" - `True-Client-Ip` 请求头
+# "x_envoy_external_address" - `X-Envoy-External-Address` 请求头
+# "x_real_ip" - `X-Real-Ip` 请求头
+# "direct" - 直接连接的 IP 地址 (其他选项的后备)
+#
+# 只有在您确定只有您的反向代理会发送该预期的请求头时才设置此项。
+# 这里没有“连接的 IP 是否被允许设置此请求头”的检查；只要选定的请求头存在，就会被使用。
+#
+# 如果设置了 `accepted_ip_sources`，此项将被忽略。
+#
+# 如果未设置，将使用 `direct`。此外，如果找不到所选请求头，`direct` 会作为后备使用。
+#
+#request_ip_source = false
+
+# 真实客户端 IP 接受的来源。
+#
+# 接受以下选项的任意组合：
+#
+# "cf_connecting_ip" - `Cf-Connecting-Ip` 请求头
+# "cloudfront_viewer_address" - `CloudFront-Viewer-Address` 请求头
+# "fly_client_ip" - `Fly-Client-IP` 请求头
+# "x_forwarded_for" - `X-Forwarded-For` 请求头的最右侧值
+# "true_client_ip" - `True-Client-Ip` 请求头
+# "x_envoy_external_address" - `X-Envoy-External-Address` 请求头
+# "x_real_ip" - `X-Real-Ip` 请求头
+# "direct" - 直接连接的 IP 地址
+#
+# 只有在您确定只有您的反向代理会发送该预期的请求头时才设置此项。
+# 这里没有“连接的 IP 是否被允许设置此请求头”的检查；只要选定的请求头存在，就会被使用。
+#
+# 必须有一个配置的来源可用，否则请求会被拒绝。如果您想要一个后备（包括 `direct`！），
+# 您必须配置它。优先级基于配置顺序。
+#
+# 如果未设置，将使用 `request_ip_source` 的配置。
+#
+#accepted_ip_sources = []
+
+# 文件上传的最大请求大小，以字节为单位。默认为 20MB。
+# 同时也限制了传入的联邦媒体大小。
+#
+#max_request_size = 20971520
+
+# 服务器将向其他服务器请求的 prev_events（先前事件）的最大数量。
+#
+# 当向另一个服务器请求房间事件时，此服务器将指定最大 prev_events，
+# 供另一个服务器在响应中返回。这可用于例如回填房间数据和获取丢失的事件。
+#
+#max_fetch_prev_events = 1024
+
+# 服务器在任何给定时间愿意处理的传入联邦事务数。
+# 超过此数量后，服务器将变得过载并开始拒绝后续事务，直到有一些槽位可用。
+#
+# 将此值设置得太低或太高可能会导致联邦不稳定，设置得太高可能会导致资源使用失控。
+#
+#max_concurrent_inbound_transactions = 150
+
+# 完成远程加入时排队的最大联邦 PDU 数量。
+#
+#remote_join_pdu_queue_capacity = 50
+
+# 缓存的联邦事务响应的最大存在时间（以秒为单位）。
+# 早于此时间的条目将在清理期间被删除。
+#
+#transaction_id_cache_max_age_secs = 7200 (2 小时)
+
+# 缓存的联邦事务响应的最大数量。
+# 当缓存超过此限制时，较旧的条目将被删除。
+#
+#transaction_id_cache_max_entries = 8192
+
+# 默认/基础 连接超时（秒）。这仅被 URL 预览和 更新/新闻 端点检查使用。
+#
+#request_conn_timeout = 10
+
+# 默认/基础 请求超时（秒）。等待从另一个服务器接收更多数据的时间。
+# 这仅被 URL 预览、更新/新闻 和杂项端点检查使用。
+#
+#request_timeout = 35
+
+# 默认/基础 完整请求总超时（秒）。整个请求的时间限制。
+# 此项设置得非常高，以免取消健康的请求，同时起到最终保障作用。
+# 这仅被 URL 预览和 更新/新闻 端点检查使用。
+#
+#request_total_timeout = 320
+
+# 默认/基础 空闲连接池超时（秒）。这仅被 URL 预览和 更新/新闻 端点检查使用。
+#
+#request_idle_timeout = 5
+
+# 默认/基础 每个主机的最大空闲连接数。这仅被 URL 预览和 更新/新闻 端点检查使用。
+# 默认为 1，因为通常可以重复使用同一个开放的连接。
+#
+#request_idle_per_host = 1
+
+# 联邦网络 well-known 解析的连接超时（秒）。
+#
+#well_known_conn_timeout = 6
+
+# 联邦网络 HTTP well-known 解析请求超时（秒）。
+#
+#well_known_timeout = 10
+
+# 联邦客户端连接超时（秒）。您不应将此值设置过高，
+# 因为死掉的主服务器会显著减慢联邦速度，特别是密钥检索，如果主服务器不响应，
+# 这将大约花费您在此处配置的时间。这将导致大多数客户端的 /keys/query 超时，
+# 进而导致端到端加密 (E2EE) 和设备验证失败。
+#
+#federation_conn_timeout = 10
+
+# 联邦客户端请求超时（秒）。您绝对希望将此值设置得较高，
+# 以兼顾极大型的房间加入、缓慢的主服务器、您自己的资源等情况。
+#
+# 房间加入 (Joins) 拥有 6 倍的超时时间。
+#
+#federation_timeout = 60
+
+# 策略服务器 (Policy server) 请求超时（秒）。通常策略服务器应近乎即时响应，
+# 但在负载下可能会变慢。如果策略服务器在短时间内没有响应，如果此限制设置得太高，
+# 配置了该服务器的房间可能变得不可用。30 秒是一个好的默认值，
+# 如果能接受暂时的发送失败作为权衡，较低的值也可以。
+#
+# 关于策略服务器：https://matrix.org/blog/2025/04/introducing-policy-servers/
+# (在 Matrix v1.18 稳定)
+#
+#policy_server_request_timeout = 30
+
+# 联邦客户端空闲连接池超时（秒）。
+#
+#federation_idle_timeout = 25
+
+# 联邦客户端每个主机的最大空闲连接数。
+# 默认为 1，因为通常可以重复使用同一个开放连接。
+#
+#federation_idle_per_host = 1
+
+# 联邦发送方请求超时（秒）。远程服务器处理发送的事务可能需要一段时间。
+#
+#sender_timeout = 180
+
+# 联邦发送方空闲连接池超时（秒）。
+#
+#sender_idle_timeout = 180
+
+# 联邦发送方重试回退基础时间（秒）。
+#
+# 对于每一次失败的联邦请求，此周期将加倍，直到远程服务器恢复健康，
+# 或者该值被限制在 `sender_retry_backoff_limit` 内。
+#
+#sender_retry_backoff_base = 10
+
+# 联邦发送方重试回退限制时间（秒）。
+#
+# 默认值为一周。如果回退周期超过此值，请求绝不会停止重试，
+# 但是每次请求之间的最大时间间隔将被限制在此值。
+#
+# 如果请求成功，或者 continuwuity 收到了来自被执行回退的服务器的请求，回退周期将被重置。
+#
+# 不建议将此值降低至 48 小时以下，也不建议高于 1 年。
+#
+#sender_retry_backoff_limit = 604800
+
+# 应用服务 (Appservice) URL 请求连接超时。
+# 默认为 35 秒，因为通常应用服务托管在同一网络内。
+#
+#appservice_timeout = 35
+
+# 应用服务 (Appservice) URL 空闲连接池超时（秒）。
+#
+#appservice_idle_timeout = 300
+
+# 通知网关推送器 (pusher) 请求连接超时（秒）。
+#
+#pusher_conn_timeout = 15
+
+# 通知网关推送器总请求超时（秒）。
+#
+#pusher_timeout = 60
+
+# 通知网关推送器空闲连接池超时（秒）。
+#
+#pusher_idle_timeout = 15
+
+# 接收客户端请求的最大时间（秒）。
+#
+#client_receive_timeout = 75
+
+# 处理接收到的客户端请求的最大时间（秒）。
+#
+#client_request_timeout = 180
+
+# 向客户端传输响应的最大时间（秒）。
+#
+#client_response_timeout = 120
+
+# 干净关闭客户端请求的宽限期（秒）。
+#
+#client_shutdown_timeout = 10
+
+# 干净关闭联邦请求的宽限期（秒）。
+#
+#sender_shutdown_timeout = 5
+
+# 启用注册。如果设置为 false，则任何用户都无法在此服务器上注册。
+#
+# 如果在未配置令牌的情况下设置为 true，用户只能在您将以下选项设置为 true 时进行无第二步验证的注册：
+# `yes_i_am_very_very_sure_i_want_an_open_registration_server_prone_to_abuse`
+#
+# 如果您希望仅通过令牌注册，请配置 `registration_token`。
+#
+#allow_registration = true
+
+# 如果启用了注册，并且此设置为 true，则在第一个管理员用户之后注册的新用户将自动被挂起，
+# 并需要管理员运行 `!admin users unsuspend <user_id>` 来解除挂起。
+#
+# 被挂起的用户仍然可以阅读消息、更新个人资料、离开房间和停用他们的帐户，
+# 但是不能发送消息、邀请，也不能创建/加入或以其他方式修改房间。
+# 他们实际上处于只读状态。
+#
+# 如果您想用这个来筛选在您的服务器上注册的人，您应该在 `auto_join_rooms` 中添加一个公开房间，
+# 里面包含新用户可以阅读的信息（因为他们无法私聊任何人，也发不了消息，可能会感到困惑）。
+#
+#suspend_on_register = false
+
+# 启用此设置将毫无限制地向任何人开放注册。
+# 这会使您的服务器容易受到滥用。
+#
+#yes_i_am_very_very_sure_i_want_an_open_registration_server_prone_to_abuse = false
+
+# 创建帐户时新用户必须提供的一个静态注册令牌。
+# 此令牌不会取代来自其他来源的令牌，例如 `!admin token` 命令或
+# `registration_token_file` 配置选项。
+#
+# 示例: "o&^uCtes4HPf0Vu@F20jQeeWE7"
+#
+#registration_token =
+
+# 包含静态注册令牌的文件路径，每行一个。
+# 此文件中的令牌不会取代来自其他来源的令牌，例如 `!admin token` 命令或
+# `registration_token` 配置选项。
+#
+# 此文件只在 Continuwuity 启动时读取一次。目前重新加载服务器配置时不会重新读取。
+# 如果无法读取该文件，Continuwuity 将启动失败。
+#
+#registration_token_file =
+
+# reCaptcha 的公开站点密钥 (site key)。如果提供此项，
+# 注册时必须进行 reCaptcha 验证。如果同时启用了验证码*和*注册令牌，则注册时两项都需要。
+#
+# 警告：如果您希望验证码在第三方客户端中工作，或者在您自身域以外的客户端中工作，
+# **必须**禁用 "Verify the origin of reCAPTCHA solutions" (验证 reCAPTCHA 解决方案的来源)！
+#
+# 必须启用注册（`allow_registration` 必须为 true）此项才会生效。
+#
+#recaptcha_site_key =
+
+# reCaptcha 的私有站点密钥。
+# 如果省略此项，即使设置了 `recaptcha_site_key`，验证码注册也将无法工作。
+#
+#recaptcha_private_site_key =
+
+# 控制是否允许用户通过帐户管理面板或其 Matrix 客户端停用 (deactivate) 自己的帐户。
+# 服务器管理员始终可以使用相关的管理员命令停用用户。
+#
+# 请注意，在某些司法管辖区，如果您将此选项设置为 `false`，
+# 您在法律上可能有义务响应请求停用其帐户的用户。
+#
+#allow_deactivation = true
+
+# 控制是否允许加密的房间和事件。
+#
+#allow_encryption = true
+
+# 控制是否允许联邦。由于潜在的联邦中断，不建议在事后禁用此项。
+#
+#allow_federation = true
+
+# 允许向自身发出联邦请求。
+#
+# 这并非设计的意图。如果向自己发送联邦请求，极有可能是一个 Bug。
+# 这个设置目前主要用于开发目的。
+#
+#federation_loopback = false
+
+# 在离开房间时始终代表用户调用 /forget。
+# 这是 MSC4267 "离开时自动遗忘房间" 的一部分。
+#
+#forget_forced_upon_leave = false
+
+# 将此项设置为 true，将要求在通常未经身份验证的配置文件检索端点 (GET)
+# "/_matrix/client/v3/profile/{userId}" 上进行身份验证。
+#
+# 这可以防止个人资料被抓取（爬虫）。
+#
+#require_auth_for_profile_requests = false
+
+# 将此项设置为 true 以允许通过联邦网络获取服务器的公共房间目录。
+# 将此项设置为 false 可防御针对 /publicRooms 的爬虫，但也将禁止外部用户查看
+# 服务器的公共房间目录。如果完全禁用了联邦（`allow_federation`），此项本质上为 false。
+#
+#allow_public_room_directory_over_federation = false
+
+# 将此项设置为 true 将锁定您的服务器的公共房间目录，仅允许管理员
+# 将房间发布到房间目录。启用此功能后，所有用户仍然可以取消发布。
+#
+#lockdown_public_room_directory = false
+
+# 将此项设置为 true 以允许设备显示名称的联邦 / 允许外部用户查看您的设备显示名称。
+# 如果完全禁用了联邦（`allow_federation`），此项本质上为 false。
+# 出于隐私原因，最好将其禁用。
+#
+#allow_device_name_federation = false
+
+# 配置选项，允许或禁止试图从 `/_matrix/federation/v1/query/profile`
+# 获取我们本地用户配置文件的入站联邦请求。
+#
+# 增加了本地用户的隐私（如显示名称），但是当某些远程用户试图邀请您进行私聊 (DM) 
+# 或加入房间时，他们可能会得到一个错误的 "该用户不存在" 报错。
+# 同样可以防止个人资料爬虫。
+#
+# 如果禁用了 `allow_federation`，此项本质上为 false。
+#
+#allow_inbound_profile_lookup_federation_requests = true
+
+# 允许标准用户创建房间。应用服务 (Appservices) 和管理员总是允许创建房间。
+#
+#allow_room_creation = true
+
+# 设置为 false 可禁止用户加入或创建不受 continuwuity 官方支持的房间版本。
+#
+# continuwuity 官方支持的房间版本为 6 - 12。
+#
+# continuwuity 对版本 3 - 5 有部分实验性支持（尽管在实践中运行良好）。
+#
+#allow_unstable_room_versions = true
+
+# continuwuity 创建房间时的默认房间版本。
+# 请注意，这必须是一个字符串，因为房间版本是字符串而不是整数。
+# 忘记加上引号将导致服务器启动失败！
+#
+# 根据规范，房间版本 "12" 是默认值。
+#
+#default_room_version = "12"
+
+# 创建房间时访问控制列表 (ACL) 的默认允许值。
+#
+# 如果提供了一个列表，新房间将被创建并带有一个 m.room.server_acl 事件。
+# 只有匹配列表中某一模式的服务器才被允许参与该房间。
+#
+# 现有房间的 ACL 不会自动更新。这不能替代审核机器人。
+#
+#default_room_acl_allow =
+
+# 创建房间时访问控制列表 (ACL) 的默认拒绝值。
+#
+# 如果提供了一个列表，新房间将被创建并带有一个 m.room.server_acl 事件。
+# 匹配列表中某一模式的服务器将不被允许参与该房间。
+#
+# 如果使用了 default_room_acl_allow 配置，则无法使用此配置。
+#
+# 现有房间的 ACL 不会自动更新。这不能替代审核机器人。
+#
+#default_room_acl_deny =
+
+# 在尝试用“占位事件 (dummy event)”手动压缩房间中的前向极值 (forward extremities) 之前
+# 能容忍的前向极值数量。将其设置在 20 以上会阻碍其功效，
+# 将其设置在 5 以下将导致发送过多不必要的占位事件（这会增加联邦流量）。
+#
+#dummy_event_threshold = 10
+
+# 启用 OpenTelemetry OTLP 追踪导出。这取代了已弃用的 Jaeger 导出器。
+# 追踪数据将通过 OTLP 发送到支持 OpenTelemetry 协议的收集器（例如 Jaeger）。
+#
+# 使用 OTEL_EXPORTER_OTLP_ENDPOINT 环境变量配置您的 OTLP 端点
+# （默认为 http://localhost:4318）。
+#
+#allow_otlp = false
+
+# OTLP 追踪跨度 (spans) 的过滤器。这控制哪些 spans 会被导出到 OTLP 收集器。
+#
+#otlp_filter = "info"
+
+# OTLP 追踪导出的协议。选项为 "http" 或 "grpc"。
+# 默认情况下，HTTP 协议使用端口 4318，而 gRPC 使用端口 4317。
+#
+#otlp_protocol = "http"
+
+# 如果在编译时启用了 'perf_measurements' 功能，则允许使用 tracing_flame
+# 收集追踪跨度的折叠堆栈跟踪配置文件。由此产生的配置文件可以使用
+# inferno[1]、speedscope[2] 或其他多种工具可视化（火焰图）。
+#
+# [1]: https://github.com/jonhoo/inferno
+# [2]: www.speedscope.app
+#
+#tracing_flame = false
+
+# tracing_flame 将跟踪的日志级别。
+#
+# 有关更多详细信息，请参阅 "tracing_flame"。
+#
+#tracing_flame_filter = "info"
+
+# tracing_flame 数据的输出路径。
+#
+# 有关更多详细信息，请参阅 "tracing_flame"。
+#
+#tracing_flame_output_path = "./tracing.folded"
+
+# 示例：
+#
+# - 无代理（默认）：
+#
+#       proxy = "none"
+#
+# - 对于全局代理，在此文件的底部创建部分：
+#
+#       [global.proxy]
+#       global = { url = "socks5h://localhost:9050" }
+#
+# - 若要为某些域名配置代理：
+#
+#       [global.proxy]
+#       [[global.proxy.by_domain]]
+#       url = "socks5h://localhost:9050"
+#       include = ["*.onion", "matrix.myspecial.onion"]
+#       exclude = ["*.myspecial.onion"]
+#
+# 包含 (Include) 与 排除 (Exclude)：
+#
+# - 如果 include 是一个空列表，则假定为 `["*"]`。
+#
+# - 如果一个域名同时匹配排除和包含列表，只有当它包含的规则比排除规则更具体时，
+#   才会使用该代理。在上面的例子中，代理将用于 `ordinary.onion`、`matrix.myspecial.onion`，
+#   但不会用于 `hello.myspecial.onion`。
+#
+#proxy = "none"
+
+# 此处列出的服务器将用于收集其他服务器的公钥（受信任的公证密钥服务器 notary trusted key servers）。
+#
+# 目前，continuwuity 不支持入站批处理密钥请求，因此
+# 该列表应该只包含其他的 Synapse 服务器。
+#
+# 示例: ["matrix.org", "tchncs.de"]
+#
+#trusted_servers = ["matrix.org"]
+
+# 是先查询 trusted_servers 中列出的服务器，还是先查询原始服务器。
+# 为了获得最佳安全性，建议优先查询原始服务器，以最大限度减少对受损的受信任服务器的暴露。
+# 为了获得最大的联邦/加入性能，可以将其设置为 true，
+# 然而还有其他选项可以在特定高负载情况下优先查询受信任的服务器，在将其设置为 true 之前应对此进行评估。
+#
+#query_trusted_key_servers_first = false
+
+# 是否专门在加入房间时优先查询 trusted_servers 中列出的服务器。
+# 此选项将对受损受信任服务器的暴露风险限制在仅限于房间加入操作。
+# 加入操作需要从许多源服务器收集密钥，这可能会导致明显的延迟。
+# 因此这默认为 true，以减少开箱即用时的意外延迟。对于安全偏执狂或能容忍延迟的人，
+# 建议将其设置为 false。请注意，将 query_trusted_key_servers_first 设置为 true 将导致此选项被忽略。
+#
+#query_trusted_key_servers_first_on_join = true
+
+# 仅向受信任的服务器查询密钥，而不查询原始服务器。
+# 这是专为集群或自定义部署准备的，利用其 trusted_servers 作为转发代理来缓存和消除重复请求。
+# 公证服务器默认不充当转发代理，因此，除非您确切知道自己在做什么，否则不要启用此选项。
+#
+#only_query_trusted_key_servers = false
+
+# 每次受信任服务器批量查询中请求的最大密钥数。
+#
+#trusted_server_batch_size = 1024
+
+# continuwuity 的最大日志级别。允许使用 debug、info、warn 或 error。
+#
+# 另请参见：
+# https://docs.rs/tracing-subscriber/latest/tracing_subscriber/filter/struct.EnvFilter.html#directives
+#
+# **注意**：
+# 对于 Release 构建，tracing crate 被配置为仅实现高于 error 的级别，
+# 以避免编译后的二进制文件中由于跟踪宏造成的非必要开销。Debug 构建不受此限制。
+#
+#log = "info"
+
+# 输出带有 ANSI 颜色的日志。
+#
+#log_colors = true
+
+# 配置将与日志一起输出的跟踪事件 (span events)。
+#
+#log_span_events = "none"
+
+# 配置 CONTINUWUITY_LOG EnvFilter 是否使用正则表达式匹配值。
+# 请参阅 tracing_subscriber 有关 Directives 的文档。
+#
+#log_filter_regex = true
+
+# 切换在追踪日志输出中显示 ThreadId（线程 ID）。
+#
+#log_thread_ids = false
+
+# 在 Unix 平台上启用 journald 日志记录。
+#
+# 启用后，日志输出将发送到 systemd journal。
+# 这仅支持在 Unix 平台上使用。
+#
+#log_to_journald = false
+
+# 与 journald 日志一起使用的 syslog 标识符。
+#
+# 仅当启用了 journald 日志时使用。
+#
+# 默认为二进制文件名。
+#
+#journald_identifier =
+
+# OpenID 令牌过期时间/TTL，以秒为单位。
+#
+# 这些是主要用于 Matrix 帐户集成（例如 Element 中的 Vector Integrations）的 OpenID 令牌，
+# *不是* OIDC / OpenID Connect 等。
+#
+#openid_token_ttl = 3600
+
+# 允许现有的会话为另一个客户端颁发登录令牌。
+# 这需要交互式身份验证，但存在安全后果，因为恶意客户端可能会使用此机制产生多于一个会话。
+# 默认启用。
+#
+#login_via_existing_session = true
+
+# 登录令牌过期时间/TTL，以毫秒为单位。
+#
+# 这些是 m.login.token 端点的短效令牌。
+# 这用于允许现有会话创建新会话。
+# 请参见 login_via_existing_session。
+#
+#login_token_ttl = 120000
+
+# 如果不使用共享密钥 ("turn_secret")，则提供给客户端的静态 TURN 用户名。
+# 建议使用共享密钥而不是静态凭据。
+#
+#turn_username = false
+
+# 如果不使用共享密钥 ("turn_secret")，则提供给客户端的静态 TURN 密码。
+# 建议使用共享密钥而不是静态凭据。
+#
+#turn_password = false
+
+# 要使用的 TURN URI/服务器的列表/数组。
+#
+# 请将 "example.turn.uri" 替换为您的 TURN 域名，例如 coturn 的 "realm" 配置选项。
+# 如果通过 TLS 使用 TURN，将 URI 前缀 "turn:" 替换为 "turns:"。
+#
+# 示例: ["turn:example.turn.uri?transport=udp", "turn:example.turn.uri?transport=tcp"]
+#
+#turn_uris = []
+
+# 用于生成 HMAC-SHA1 哈希以产生用户名和密码的 TURN 密钥。
+#
+# 这更安全，但如果需要，您可以使用传统的静态用户名/密码凭据。
+#
+#turn_secret = false
+
+# 从指定的路径读取的要使用的 TURN 密钥。
+#
+# 此项的优先级高于 "turn_secret"，如果无效或打开失败，将退回使用 "turn_secret"。
+#
+# 示例: "/etc/continuwuity/.turn_secret"
+#
+#turn_secret_file =
+
+# TURN TTL，以秒为单位。
+#
+#turn_ttl = 86400
+
+# continuwuity 将让新注册用户自动加入的房间 ID 或房间别名列表/数组。
+# 指定的房间必须是您在服务器上至少加入过一次的房间，并且必须是公共房间。
+#
+# 示例: ["#continuwuity:continuwuity.org", "!main-1:continuwuity.org"]
+#
+#auto_join_rooms = []
+
+# 自动停用尝试加入以下任一对象的帐户的配置选项：
+# - 被禁止的房间
+# - 被禁止的房间别名
+# - 具有被禁止服务器名称的房间别名或 ID
+#
+# 如果您的所有封禁列表都由包含毒性内容的房间或出于善意的用户绝对不会尝试加入的服务器组成，
+# 这可能会很有用，它可以在不需要管理员干预的情况下自动纠正问题。
+#
+# 这也将使用户退出所有房间。在这里将忽略联邦（例如远程房间邀请）。
+#
+# 默认为 false，因为房间可能会因为非审核相关的原因被封禁，并且这会执行完整的用户停用操作。
+#
+#auto_deactivate_banned_room_attempts = false
+
+# RocksDB 日志级别。这与 continuwuity 的日志级别不同。
+# 这是 RocksDB 引擎/库的日志级别，将在您的数据库文件夹/路径下显示为 `LOG` 文件。
+# continuwuity 通常将正常的 RocksDB 错误通过追踪 (tracing) 记录，严重错误为了安全会触发 panic。
+#
+#rocksdb_log_level = "error"
+
+# 是否将 RocksDB 错误输出到 stderr。
+#
+#rocksdb_log_stderr = false
+
+# 轮转之前最大的 RocksDB `LOG` 文件大小（以字节为单位）。默认为 4MB。
+#
+#rocksdb_max_log_file_size = 4194304
+
+# RocksDB 将强制轮转日志的时间（以秒为单位）。
+#
+#rocksdb_log_time_to_roll = 0
+
+# 将此项设置为 true 将使用专为机械硬盘 (HDD，速度较慢的存储设备) 定制的 RocksDB 配置选项。
+#
+# 值得注意的是，默认情况下，continuwuity 将启用 Direct IO 来使用 RocksDB。
+# *通常* 来说，这会提高性能，因为它绕过了缓冲 I/O（系统页缓存）。
+# 然而，如果您的设置不常见，存在 Direct IO 可能导致数据库操作出现问题的可能性。
+# 这已在 FUSE 文件系统上观察到，在 ZFS 文件系统上也可能发生。
+# RocksDB 通常会处理/纠正这些问题，但它无法考虑到所有的设置情况。
+# 如果您遇到任何奇怪的 RocksDB 问题，请尝试启用此选项，因为它会关闭 Direct IO，
+# 并且如果这个选项修复了您的数据库问题，欢迎在 continuwuity Matrix 房间报告。
+#
+# 更多信息，请参见：
+# https://github.com/facebook/rocksdb/wiki/Direct-IO
+#
+#rocksdb_optimize_for_spinning_disks = false
+
+# 启用 direct-io 以通过无缓冲的 I/O 提升数据库性能。
+#
+# 有关 direct I/O 和 RockDB 的更多详细信息，请参见：
+# https://github.com/facebook/rocksdb/wiki/Direct-IO
+#
+# 如果数据库驻留在不支持 direct-io 的文件系统（如 FUSE）上，或任何形式的复杂文件系统（如 ZFS），
+# 请将此选项设置为 false。
+#
+#rocksdb_direct_io = true
+
+# RocksDB 在数据库操作（如清理、同步、刷新、压缩等）中用于并行处理的线程数量。
+# 设置为 0 将使用所有逻辑线程。默认为您 CPU 的逻辑线程数。
+#
+#rocksdb_parallelism_threads = 因系统而异
+
+# RocksDB 将保留的 LOG 文件的最大数量。这*绝不能*设置为 0。它必须至少为 1。
+# 默认为 3，因为除非解决/调试 RocksDB 的 bug，否则这些文件用处不大。
+#
+#rocksdb_max_log_files = 3
+
+# 要使用的 RocksDB 数据库压缩类型。
+#
+# 可选选项为 "zstd"、"bz2"、"lz4" 或 "none"。
+#
+# 最好使用 ZSTD，它在速度/性能、存储、I/O 放大和 CPU 使用率之间有很好的平衡。
+# 为了获得更高的性能但较少的压缩率（使用更多存储空间）和较少的 CPU 使用率，请使用 LZ4。
+#
+# 更多细节请见：
+# https://github.com/facebook/rocksdb/wiki/Compression
+#
+# "none" 将禁用压缩。
+#
+#rocksdb_compression_algo = "zstd"
+
+# 指定给 RocksDB 使用的压缩算法的压缩级别。
+#
+# 默认值为 32767，这是 RocksDB 内部读取的默认魔数，并会将其转换为各个库各自不同的默认压缩级别。
+# 请参阅他们的 `kDefaultCompressionLevel`。
+#
+# 注意，当使用默认值时，我们可能会用专为 continuwuity 定制的设置覆盖它。
+#
+#rocksdb_compression_level = 32767
+
+# RocksDB 最底层(bottommost)级别/数据使用的压缩算法的压缩级别。
+# 默认值为 32767，这与上述同理。
+#
+# 由于这是最底层（通常是旧的、最不常使用的数据），在这里设置一个非常高的压缩级别可能是可取的，
+# 因为这些数据被使用的可能性较小。请研究您选择的压缩算法。
+#
+# 注意，当使用默认值时，我们可能会用专为 continuwuity 定制的设置覆盖它。
+#
+#rocksdb_bottommost_compression_level = 32767
+
+# 是否启用 RocksDB 的 "bottommost_compression" (底层压缩)。
+#
+# 以占用更多 CPU 为代价，这将进一步压缩数据库以减少存储空间使用。
+# 建议将 ZSTD 压缩与此项结合使用以获得最佳压缩结果。如果您正试图减少数据库使用的存储，可能会很有用。
+#
+# 详情见 https://github.com/facebook/rocksdb/wiki/Compression 。
+#
+#rocksdb_bottommost_compression = true
+
+# RocksDB 的预写式日志 (WAL, Write-Ahead-Log) 压缩算法。
+#
+# 目前，RocksDB 的 WAL 压缩仅支持 ZSTD。启用此项可减小 WAL 大小，代价是写入期间占用部分 CPU。
+#
+# 选项有：
+# - "none" = 无压缩
+# - "zstd" = ZSTD 压缩
+#
+# 关于 WAL 压缩的更多信息，请见：
+# https://github.com/facebook/rocksdb/wiki/WAL-Compression
+#
+#rocksdb_wal_compression = "zstd"
+
+# 数据库恢复模式（用于 RocksDB WAL 损坏）。
+#
+# 当服务器报告损坏并拒绝启动时，使用此选项。
+# 设置模式 2 (PointInTime) 从这种损坏中干净地恢复。
+# 服务器将从崩溃前几秒钟或几分钟的最后一个良好状态继续运行。
+# 客户端可能必须运行 "清空缓存并重新加载 (clear-cache & reload)" 来应对这种回滚。
+# 成功恢复后，您可以将该模式重置回默认值并再次重启。请注意，在某些情况下，在 PointInTime 模式下运行，
+# 损坏错误至少需要 30 分钟才会清除。
+#
+# 作为最后的挣扎尝试，如果 PointInTime 没有修复或解决任何问题，
+# 您可以尝试模式 3 (SkipAnyCorruptedRecord)，但这将使服务器处于一种潜在的不一致状态。
+#
+# 默认模式 1 (TolerateCorruptedTailRecords) 将在关机时如果发现损坏自动丢弃数据库中的最后一条记录，仅此而已。
+# 它极不可能造成客户端失去同步。若要禁用任何形式的静默回滚，请将模式设置为 0 (AbsoluteConsistency)。
+#
+# 选项如下：
+# 0 = AbsoluteConsistency（绝对一致性）
+# 1 = TolerateCorruptedTailRecords（容忍尾部记录损坏，默认）
+# 2 = PointInTime（时间点恢复，尝试恢复时用我）
+# 3 = SkipAnyCorruptedRecord（跳过任何损坏的记录，你的 Continuwuity 已经失去保修了）
+#
+# 有关这些模式的更多信息，请见：
+# https://github.com/facebook/rocksdb/wiki/WAL-Recovery-Modes
+#
+# 有关恢复损坏数据库的更多详情，请见：
+# https://continuwuity.org/troubleshooting.html#database-corruption
+#
+#rocksdb_recovery_mode = 1
+
+# 启用或禁用极其严格 (paranoid) 的 SST 文件检查。
+# 这可以提高 RocksDB 数据库的一致性，代价是由于运行进一步的安全检查而带来的潜在性能影响。
+#
+# 更多信息请见：
+# https://github.com/facebook/rocksdb/wiki/Online-Verification#columnfamilyoptionsparanoid_file_checks
+#
+#rocksdb_paranoid_file_checks = false
+
+# 在运行时启用或禁用 rocksdb 中的校验和验证。
+# 校验和通常硬件加速且开销很低；默认在 rocksdb 中开启。
+# 较旧或较慢的平台可能会通过禁用该项获得收益。
+#
+#rocksdb_checksums = true
+
+# 在 rocksdb 中启用 "atomic flush" 模式。此选项并非针对最终用户。
+# 以后版本可能会删除或忽略此项。偏执狂可以启用 atomic flush，可能以性能为代价提高数据库完整性。
+#
+#rocksdb_atomic_flush = false
+
+# 数据库修复模式（针对 RocksDB SST 损坏）。
+#
+# 当服务器在运行时报告损坏或发生 panic 时，使用此选项。如果服务器拒绝启动，
+# 请优先使用 recovery mode (恢复模式) 选项。包含缩写 'SST' 的损坏错误发生在启动后时，可能需要此选项。
+#
+# - 建议在运行修复之前备份您的数据库目录。
+#
+# - 建议在运行修复之后禁用修复模式并重新启动服务器。
+#
+# 有关恢复损坏数据库的更多详情，请见 https://continuwuity.org/troubleshooting.html#database-corruption。
+#
+#rocksdb_repair = false
+
+# 启用压缩 (compaction) 线程的闲置 CPU 优先级。
+# 默认情况下不启用此功能，以防止在繁忙的系统上压缩落后太多。
+#
+#rocksdb_compaction_prio_idle = false
+
+# 启用压缩线程的闲置 I/O 优先级。
+# 这可以防止服务器操作出现任何意想不到的延迟，通常是个好主意。默认已启用。
+#
+#rocksdb_compaction_ioprio_idle = true
+
+# 启用 RocksDB 压缩。您永远不应该需要将此选项设置为 false。
+# 如果出于某种原因发现由于故障排查或错误而需要使用此选项，
+# 请带着信息和详情到 continuwuity Matrix 房间与我们联系。
+#
+# 禁用压缩将导致一个显著膨胀和爆炸性扩大的数据库，逐渐降低性能，
+# 造成不必要过度的磁盘读写，并减慢关闭和启动时间。
+#
+#rocksdb_compaction = true
+
+# 统计信息的收集级别。一些用于显示数据库统计信息的管理员命令可能要求设置此选项。
+# 较高的设置可能会对数据库性能产生影响。
+#
+# 选项是 0 到 6 的数字：
+# 0 = 无统计信息。
+# 1 = release 模式下无统计信息（默认）。
+# 2 到 3 = 无性能影响的统计信息。
+# 3 到 5 = 可能有性能影响的统计信息。
+# 6 = 全部统计信息。
+#
+#rocksdb_stats_level = 1
+
+# 可以配置这样一个密码，它将允许您登录服务器机器人帐户（目前是 `@conduit`）
+# 用于紧急故障排除目的，例如恢复/重建您的管理员房间，或将您自己邀请回来。
+#
+# 请参见 https://continuwuity.org/troubleshooting.html#lost-access-to-admin-room 了解返回管理员房间的其他方法。
+#
+# 处于安全考虑，一旦未设置此密码，所有会话都将注销。
+#
+# 示例: "F670$2CP@Hw8mG7RY1$%!#Ic7YA"
+#
+#emergency_password =
+
+# 指定向推送网关发送推送通知的路径。
+#
+# 当 Matrix 客户端注册推送通知时，它将指定一个发送通知事件的推送网关 URL。
+# 根据目前 Matrix Push Gateways 的规范，路径应始终为 "/_matrix/push/v1/notify"。
+# 除非您配置了自己且需要不同路径的推送网关，否则不应更改此项。
+#
+# 有关 Push Gateways 的更多信息：https://spec.matrix.org/latest/push-gateway-api/
+#
+#notification_push_path = "/_matrix/push/v1/notify"
+
+# 允许本地（仅限您的服务器）在线状态更新/请求。
+#
+# 要使出站的在线状态功能正常工作，必须启用本地在线状态。
+#
+# 请注意，本地在线状态不如联邦网络在线状态对 CPU 的负担大，
+# 但您的本地用户越多，开销也就越大。
+#
+#allow_local_presence = true
+
+# 允许传入联邦在线状态更新。
+#
+# 此选项启用处理来自其他服务器的入站在线状态更新。如果没有它，远程用户
+# 在您的本地用户看来将好像总是离线状态。这不会影响“正在输入状态”或已读回执。
+#
+#allow_incoming_presence = true
+
+# 允许发出在线状态更新/请求。
+#
+# 此选项将在线状态更新发送到其他服务器，并且需要 `allow_local_presence` 也被启用。
+#
+# 请注意，出站在线状态对 CPU 和网络的要求非常高，通常会造成极大的压力和延迟，
+# 而没有带来任何实际好处。只有少数几个客户端甚至实现了在线状态，所以您很可能不想启用这个功能。
+#
+#allow_outgoing_presence = false
+
+# 多少秒没有在线状态更新后，您将变为闲置 (idle) 状态。默认为 5 分钟。
+#
+#presence_idle_timeout_s = 300
+
+# 多少秒没有在线状态更新后，您将变为离线 (offline) 状态。默认为 30 分钟。
+#
+#presence_offline_timeout_s = 1800
+
+# 为远程用户启用在线状态闲置计时器。
+#
+# 对参与许多大型房间或资源有限的服务器来说，提供禁用的选项是作为一种优化。
+# 禁用此项可能会导致某些远程用户看到不正确的在线状态（即卡在线上）。
+#
+#presence_timeout_remote_users = true
+
+# 允许本地已读回执。
+#
+# 禁用此项也会有效地禁用出站的联邦已读回执。
+#
+#allow_local_read_receipts = true
+
+# 允许接收来自远程服务器的传入已读回执。
+#
+#allow_incoming_read_receipts = true
+
+# 允许向远程服务器发送已读回执。
+#
+# 注意，在包含许多其他主服务器的大型房间中向远程服务器发送已读回执，
+# 可能会对 CPU 和网络造成额外的压力。
+#
+#allow_outgoing_read_receipts = true
+
+# 允许本地“正在输入”状态更新。
+#
+# 禁用此项也会有效地禁用出站联邦“正在输入”更新。
+#
+#allow_local_typing = true
+
+# 允许向联邦网络发出“正在输入”更新。
+#
+# 注意，在包含许多其他主服务器的大型房间中向远程服务器发送正在输入提示，
+# 可能会对 CPU 和网络造成额外的压力。
+#
+#allow_outgoing_typing = true
+
+# 允许来自联邦的传入“正在输入”更新。
+#
+#allow_incoming_typing = true
+
+# 允许使用不稳定的持久 "粘性事件 (sticky events)" ([MSC4354])
+#
+# MSC4354: https://c10y.cc/MSC4354
+#
+#allow_sticky_events = false
+
+# 联邦网络用户可以指示“正在输入”状态的最大时长。
+#
+#typing_federation_timeout_s = 30
+
+# 本地客户端可以指示“正在输入”状态的最短时长。这不会覆盖
+# 客户端发出的停止输入请求。它只是在没有停止请求的情况下强制执行的最小值。
+#
+#typing_client_timeout_min_s = 15
+
+# 本地客户端可以指示“正在输入”状态的最大时长。
+#
+#typing_client_timeout_max_s = 45
+
+# 将此项设置为 true 以让 continuwuity 使用 zstd 压缩 HTTP 响应体。
+# 如果 continuwuity 在构建时未包含 `zstd_compression` 特性，此选项不执行任何操作。
+# 请注意，启用 HTTP 压缩可能会削弱 TLS 安全性。大多数用户应该不需要启用它。
+# 决定启用之前请参阅 https://breachattack.com/ 和 https://wikipedia.org/wiki/BREACH。
+#
+#zstd_compression = false
+
+# 将此项设置为 true 以让 continuwuity 使用 gzip 压缩 HTTP 响应体。
+# 如果 continuwuity 在构建时未包含 `gzip_compression` 特性，此选项不执行任何操作。
+# 请注意，启用 HTTP 压缩可能会削弱 TLS 安全性。大多数用户应该不需要启用它。
+# 决定启用之前请参阅 https://breachattack.com/ 和 https://wikipedia.org/wiki/BREACH。
+#
+# 如果您加入了大量房间，您可能会发现需要启用此功能以减小显著过大的响应体积。
+#
+#gzip_compression = false
+
+# 将此项设置为 true 以让 continuwuity 使用 brotli 压缩 HTTP 响应体。
+# 如果 continuwuity 在构建时未包含 `brotli_compression` 特性，此选项不执行任何操作。
+# 请注意，启用 HTTP 压缩可能会削弱 TLS 安全性。大多数用户应该不需要启用它。
+# 决定启用之前请参阅 https://breachattack.com/ 和 https://wikipedia.org/wiki/BREACH。
+#
+#brotli_compression = false
+
+# 启用传统的未经身份验证的 Matrix 媒体库端点。
+# 这些端点包含：
+# - /_matrix/media/*/config
+# - /_matrix/media/*/upload
+# - /_matrix/media/*/preview_url
+# - /_matrix/media/*/download/*
+# - /_matrix/media/*/thumbnail/*
+#
+# 等效的经过身份验证的端点始终处于启用状态。
+#
+# 目前默认值为 true，但这非常容易发生变化，可能在下个版本中改变。
+#
+#allow_legacy_media = true
+
+# 如果设置为 true，则防止获取新的旧版远程媒体。
+#
+# 如果旧版媒体之前已被获取，并且 allow_legacy_media 为 true，仍然可以访问这些媒体。
+#
+#freeze_legacy_media = true
+
+# 在启动时检查媒体目录的一致性：
+# 1. 启用 `media_compat_file_link` 时，此检查将在 Conduit 和 conduwuit
+#    之间来回切换时升级媒体。要处理这部分必须启用这两个选项。
+# 2. 从目录中删除媒体时，此检查也将从数据库中删除其条目。
+#
+# 如果这些检查均不适用于您的用例，并且您的媒体目录非常大，将此项设置为 false 可能会缩短启动时间。
+#
+#media_startup_check = true
+
+# 通过创建媒体符号链接启用与 Conduit 媒体目录的向后兼容性。
+#
+# 只有当您打算再次使用 Conduit 时，才需要此选项。
+# 否则将此项设置为 false 可以减少文件系统的混乱，并减少在此目录中管理符号链接的开销。
+# 现在默认禁用。您仍然可以返回上游 Conduit，但是您必须在至少一次设置此项为 true，
+# 并在允许 media_startup_check 发生后关闭 continuwuity 再返回 Conduit。
+#
+#media_compat_file_link = false
+
+# 作为媒体启动检查的一部分，从数据库中修剪(清除)丢失的媒体。
+#
+# 这意味着如果您从媒体目录中删除了文件，对应的条目也会从数据库中删除。
+# 此项默认被禁用，因为如果媒体目录被意外移动或无法访问，数据库中的元数据条目将会丢失。
+#
+#prune_missing_media = false
+
+# 我们将通过正则表达式模式拦截入站*和*出站联邦请求，以及拦截客户端房间加入/远程用户邀请的禁止服务器名称列表。
+#
+# 请注意，您的消息仍然可以通过回填(backfilling)到达被禁止的服务器。
+# 我们通过我们*确实*进行联邦的服务器从被禁止服务器接收到的回填事件将被存储在数据库中。
+#
+# 此检查适用于房间 ID、房间别名、发送方服务器名称、发送用户所属服务器名称、入站联邦 X-Matrix 来源和出站联邦处理程序。
+#
+# 您可以将其设置为 [".*"] 以默认阻止所有服务器，然后使用 `allowed_remote_server_names` 来仅允许特定服务器。
+#
+# 示例: ["badserver\\.tld$", "badphrase", "19dollarfortnitecards"]
+#
+#forbidden_remote_server_names = []
+
+# 我们将允许的服务器名称列表（通过正则表达式），不管它们是否匹配 `forbidden_remote_server_names`。
+#
+# 如果 `forbidden_remote_server_names` 为空，此选项无效。
+#
+# 示例: ["goodserver\\.tld$", "goodphrase"]
+#
+#allowed_remote_server_names = []
+
+# continuwuity 将拒绝从中下载远程媒体的服务器名称的正则表达式模式向量列表。
+#
+# 示例: ["badserver\.tld$", "badphrase", "19dollarfortnitecards"]
+#
+#prevent_media_downloads_from = []
+
+# 被禁止的服务器名称列表（通过正则模式），我们将阻止对它们发出所有出站联邦房间目录请求。
+# 这对防止我们的用户误入不良服务器或空间很有用。
+#
+# 示例: ["badserver\.tld$", "badphrase", "19dollarfortnitecards"]
+#
+#forbidden_remote_room_directory_server_names = []
+
+# continuwuity 将不向客户端发送来自这些服务器名称的消息（通过正则表达式）。
+#
+# 请注意，客户端在执行完整同步 (full sync) 之前，无法接收在服务器被解除屏蔽后发出的消息。
+# 这是目前同步协议的限制。这意味着这多少算是一个核选项。
+#
+# 示例: ["reallybadserver\.tld$", "reallybadphrase", "69dollarfortnitecards"]
+#
+#ignore_messages_from_server_names = []
+
+# 当客户端请求加入房间时，continuwuity 将降级（最后尝试）的服务器名称列表。
+#
+# 这可能有助于潜在地加快加入房间的速度，方法是降低通过已知体量庞大或较慢的服务器发送加入请求的优先级。
+#
+# 如果无法通过与之联邦的其他服务器加入房间，continuwuity 仍然会将加入请求发送至此列表中的服务器。
+#
+# 示例: ["example.com"]
+#
+#deprioritize_joins_through_servers = []
+
+# 向客户端发送已被用户屏蔽(忽略)的用户发出的消息。
+#
+# 在没有执行完整同步(full sync)的情况下，客户端无法接收在用户被忽略期间发送的消息。
+# 这是目前同步协议的限制。禁用此选项将会把屏蔽消息的责任转移给客户端，从而可以避免此限制。
+#
+#send_messages_from_ignored_users_to_client = false
+
+# 向客户端发送 "org.matrix.dummy_event" 事件。这是一个调试选项。
+#
+#send_dummy_events_to_clients = false
+
+# 在**引号内**指定的 IPv4 和 IPv6 CIDR 范围/子网的向量列表，您不希望 continuwuity 向其发送出站请求。
+# 出于安全考虑，默认值为 RFC1918、不可路由、环回、多播和测试网络地址。
+#
+# 请注意，这不是一个保证手段。您应在应用层使用带区域的防火墙来处理，因为在应用层面上进行防御可能会被绕过。
+#
+# 目前这不像 Synapse 那样支持考虑到正在使用代理的情况。
+#
+# 要禁用，请将其设置为空向量 (`[]`)。
+#
+# 默认值为：
+# ["127.0.0.0/8", "10.0.0.0/8", "172.16.0.0/12",
+# "192.168.0.0/16", "100.64.0.0/10", "192.0.0.0/24", "169.254.0.0/16",
+# "192.88.99.0/24", "198.18.0.0/15", "192.0.2.0/24", "198.51.100.0/24",
+# "203.0.113.0/24", "224.0.0.0/4", "::1/128", "fe80::/10", "fc00::/7",
+# "2001:db8::/32", "ff00::/8", "fec0::/10"]
+#
+#ip_range_denylist =
+
+# 可选的 IP 地址或网络接口名称，将其绑定为 URL 预览请求的来源。如果未设置，它将不绑定特定的地址或接口。
+#
+# 仅 Linux、Android 和 Fuchsia 平台支持接口名称；所有其他平台都可以指定 IP 地址。
+# 要列出系统上的接口，可以使用命令 `ip link show`。
+#
+# 示例: `"eth0"` 或 `"1.2.3.4"`
+#
+#url_preview_bound_interface =
+
+# 允许发送请求进行 URL 预览的域名列表。
+#
+# 这是一个*包含 (contains)*匹配，而不是显式匹配。填写 "google.com" 将匹配 "https://google.com" 
+# 和 "http://mymaliciousdomainexamplegoogle.com"。将此项设置为 "*" 将允许所有的 URL 预览。
+# 请注意，这向服务器敞开了巨大的攻击面，我们认为您在这样做时已经意识到了风险。
+#
+#url_preview_domain_contains_allowlist = []
+
+# 明确允许发送请求进行 URL 预览的显式域名列表。
+#
+# 这是一个*显式 (explicit)*匹配，而不是包含匹配。填写 "google.com" 将匹配 
+# "https://google.com"、"http://google.com"，但不匹配 "https://mymaliciousdomainexamplegoogle.com"。
+# 将此项设置为 "*" 将允许所有的 URL 预览。请注意，这向服务器敞开了巨大的攻击面，我们认为您在这样做时已经意识到了风险。
+#
+#url_preview_domain_explicit_allowlist = []
+
+# 明确不允许发送请求进行 URL 预览的显式域名列表。
+#
+# 这是一个*显式 (explicit)*匹配，而不是包含匹配。填写 "google.com" 将匹配
+# "https://google.com"、"http://google.com"，但不匹配 "https://mymaliciousdomainexamplegoogle.com"。
+# 拒绝名单会在允许名单之前被检查。将此项设置为 "*" 不执行任何操作。
+#
+#url_preview_domain_explicit_denylist = []
+
+# 允许发送请求进行 URL 预览的 URL 向量列表。
+#
+# 注意这是一个*包含 (contains)*匹配，不是显式匹配。填写 "google.com" 将匹配 "https://google.com/"、
+# "https://google.com/url?q=https://mymaliciousdomainexample.com" 和 
+# "https://mymaliciousdomainexample.com/hi/google.com"。将此项设置为 "*" 
+# 将允许所有的 URL 预览。请注意，这向服务器敞开了巨大的攻击面，我们认为您在这样做时已经意识到了风险。
+#
+#url_preview_url_contains_allowlist = []
+
+# 爬虫时允许的 URL 预览主体大小的最大字节数。默认为 256KB。
+#
+#url_preview_max_spider_size = 256000
+
+# URL 预览的总请求超时时间（秒）。这包括连接、请求以及响应主体读取时间。
+#
+#url_preview_timeout = 120
+
+# 决定您是否希望在根域名上运行域名允许名单检查（包括“包含”与“显式”匹配）的选项。
+# 这不适用于 URL 包含允许列表。默认值为 false。
+#
+# 示例用例：如果启用了此项，并且您在显式和/或包含域名允许名单中允许了 "wikipedia.org"，
+# 它将允许所有位于 "wikipedia.org" 旗下的子域（如 "en.m.wikipedia.org"），因为会检查并匹配了根域。
+# 如果包含域名允许名单对您来说仍然太宽泛，但您又仍想允许根域名下的所有子域，这将非常有用。
+#
+#url_preview_check_root_domain = false
+
+# 用于抓取 URL 预览时特定的 User agent。
+#
+#url_preview_user_agent = "continuwuity/<version> (embedbot; facebookexternalhit/1.1; +https://continuwuity.org)"
+
+# 决定 URL 预览是否下载音频和视频文件。
+#
+#url_preview_allow_audio_video = false
+
+# 禁止的房间别名和房间 ID 列表，表现为由正则表达式模式组成的字符串。
+#
+# 可以使用正则，也可以仅通过指定单词完成显式的“包含”匹配（见示例）。
+#
+# 在创建房间别名、使用自定义房间 ID 时会对其检查；并在启动时，如果数据库中有包含被禁止房间别名/ID 的情况则作为警告。
+#
+# 示例: ["19dollarfortnitecards", "b[4a]droom", "badphrase"]
+#
+#forbidden_alias_names = []
+
+# 禁止的用户名模式/字符串列表。
+#
+# 可以使用正则，也可以仅通过指定单词完成显式的“包含”匹配（见示例）。
+#
+# 在用户名可用性检查、注册时会进行检查；并在启动时，如果数据库中有包含被禁止用户名的本地用户情况则作为警告。
+#
+# 示例: ["administrator", "b[a4]dusernam[3e]", "badphrase"]
+#
+#forbidden_usernames = []
+
+# 在启动时立即重试对远程服务器发出失败且未完成的消息。这称为“网络突发(bursting)”。
+# 如果禁用此项，相关消息可能要在更多该服务器的消息排队时才能传递。
+# 除非服务器资源极其受限，或者服务器的部署规模非常庞大，否则不要更改此选项。除非您知道在做什么，否则请勿禁用此选项。
+#
+#startup_netburst = true
+
+# 消息被丢弃且不再尝试。必须启用 `startup_netburst` 选项该值才能生效。
+# 除非您知道在做什么，否则不要改变该值。将此值设置为 -1 以重新尝试所有消息而不修剪队列；这可能会消耗大量磁盘空间。
+# 将此值设置为 0 以丢弃所有消息而不再尝试重新传递。
+#
+#startup_netburst_keep = 50
+
+# 阻止非管理员的本地用户发送房间邀请（本地和远程），并阻止非管理员用户接收远程房间邀请。
+#
+# 管理员始终被允许发送和接收所有房间的邀请。
+#
+#block_non_admin_invites = false
+
+# 允许管理员在 "#admins"（管理房间）以外的房间输入命令，只需在消息前加上
+# "\!admin" 或 "\\!admin"，后接常规 continuwuity 管理命令。系统回复将在该房间公开可见，来源于发送者。
+#
+# 示例: \\!admin debug ping continuwuity.org
+#
+#admin_escape_commands = true
+
+# 在启动时自动激活 continuwuity 管理房间的控制台 / 命令行界面 (CLI)。
+# 此选项也可以使用 `--console` 参数在 continuwuity 启动时启用。
+#
+#admin_console_automatic = false
+
+# 启动时执行的管理命令列表。
+#
+# 此选项也可以通过 `--execute` 参数进行配置，并可以接受标准的 Shell 命令和环境变量。
+#
+# 举例: `./continuwuity --execute "server admin-notice continuwuity has started up at $(date)"`
+#
+# 示例: admin_execute = ["debug ping continuwuity.org", "debug echo hi"]`
+#
+#admin_execute = []
+
+# 忽略启动命令中的错误。
+#
+# 如果设为 false，当管理员启动执行命令（`--execute` / `admin_execute`）失败时，continuwuity 将报错并启动失败。
+#
+#admin_execute_errors_ignore = false
+
+# 在收到 SIGUSR2 信号时执行的管理员命令列表。
+#
+# 与 admin_execute 类似，但这些命令在服务器在受支持的平台上收到 SIGUSR2 时执行。
+#
+#admin_signal_execute = []
+
+# 控制管理员命令捕获的日志(运行管理员命令产生的日志)的最大日志级别。在 Release 构建上默认为 "info"，而在 Debug 构建上为 "debug"。
+#
+#admin_log_capture = "info"
+
+# 适用于管理房间的默认房间标签(Room tag)。
+#
+# 在像 Element 这样的某些客户端上，"m.server_notice" 房间标签是一个出现在您房间列表最底部的特定的置顶房间。
+# 可以将 continuwuity 管理房间固定在此处，这样您就可以始终拥有一个用于管理房间的易于访问的快捷方式。
+#
+#admin_room_tag = "m.server_notice"
+
+# 一系列被认为是服务器管理员的 Matrix IDs 列表。
+#
+# 该列表中的任何 Matrix ID 都被视为管理员，不论他们是否在管理房间中。
+#
+#admins_list = []
+
+# 确定管理房间中的用户是否会被添加到 admins_list。
+#
+#admins_from_room = true
+
+# Sentry.io 崩溃/panic报告、性能监控/指标等。
+# 此功能默认不启用。
+#
+#sentry = false
+
+# Sentry 报告 URL（如果您希望使用自定义的一个）。
+#
+#sentry_endpoint = ""
+
+# 在 Sentry.io 崩溃报告和指标中上报您的 continuwuity server_name。
+#
+#sentry_send_server_name = false
+
+# Sentry.io 的性能监控/追踪采样率。
+#
+# 请注意，过高的值可能会影响性能，并可以通过将其设置为 0.0 (0%) 来禁用它。
+# 传给 Sentry 的这个值是百分比形式，表示为小数。默认采样追踪的 15% (0.15)。
+#
+#sentry_traces_sample_rate = 0.15
+
+# 是否要在 Sentry 报告中附上堆栈跟踪信息。
+#
+#sentry_attach_stacktrace = false
+
+# 向 Sentry 发送 panic。默认值为 true，但必须启用 Sentry。必须启用全局 `sentry` 配置选项才能发送任何数据。
+#
+#sentry_send_panic = true
+
+# 向 sentry 发送错误(error)。默认值为 true，但必须启用 sentry。
+# 此选项仅在 Release 模式下生效；在 Debug 模式强制为 false。
+#
+#sentry_send_error = true
+
+# 控制 Sentry 发送面包屑 (breadcrumbs) 和事务 (transactions) 的追踪日志级别。
+#
+#sentry_filter = "info"
+
+# 启用 tokio-console。此选项仅适用于开发者。
+#
+# 有关更多信息，请参阅：
+# https://continuwuity.org/development.html#debugging-with-tokio-console
+#
+#tokio_console = false
+
+# 能够修改启动行为标志(flags)列表。
+# 接受字符串数组。
+#
+# 在启动过程中，程序会在此数组中检查某些字符串是否存在。匹配到的值将改变程序运行那些启动任务的方式。
+#
+# 如果该变量为空或未包含任何匹配项，服务器将正常启动。
+#
+# 目前这里仅检查是否包含 "smoke"，这会启用“冒烟测试模式 (Smoketest mode)”。此模式下程序在运行启动任务后即退出。
+#
+#test = false
+
+# 控制是否将例如帐户注册、密码更改、帐户停用、房间目录发布等相关的管理房间通知(notices)发送到管理房间。
+# 更新通知和正常的管理命令响应仍将始终被发送。
+#
+#admin_room_notices = true
+
+# 启用数据库池亲和力(pool affinity)支持。在支持的系统上，将会检测块设备的队列拓扑(queue topologies)，
+# 并针对硬件优化请求池；将自动确定 db_pool_workers。
+#
+#db_pool_affinity = true
+
+# 设置数据库前端池中的工作线程数量。
+# 该数值应该反映系统的 I/O 能力，例如队列深度 (queue-depth) 或同时正在处理的请求量。
+# 默认为 32 或 CPU 核心数的四倍，以较大者为准。
+#
+# 注意：只有在禁用 db_pool_affinity 或未在系统上检测到时，才会使用该值；否则会自动确定。
+#
+#db_pool_workers = 32
+
+# 当启用并检测到 db_pool_affinity 时，任何 worker 分组的尺寸都不会超过设定的值。
+# 当线程池方法无法扩展至满足高端硬件的所有能力时，这种设置很必要；
+# 如果不加限制使用检测到的数值反而可能会降低性能。
+#
+# 该值将与共享同一设备队列的核心数相乘，因为群组工作线程可以安排在这些核心上的任何一个核心上运行。
+#
+#db_pool_workers_limit = 64
+
+# 决定提供给数据库前端池的队列大小。
+# 这个队列的大小由本值与池中工作线程(pool workers)的数量相乘得到。
+# 当该队列满时，负责执行请求的 tokio tasks 将让出（yield），直到有足够的空间可用；
+# 通过防止缓冲膨胀(buffer-bloat)，这对于流量控制很好，但设置得太低可能会抑制吞吐量。
+#
+#db_pool_queue_mult = 4
+
+# 设置流的并发度的初始值。此值可以用于覆盖代码中的默认值。
+# 默认值是 32，和代码中保持一致。需要注意的是，除非计算的 stream_width_scale 被禁用，
+# 本值会被该 scale 给覆盖。若禁用了计算的 scale，则该值可以当作固定的宽度来使用。
+#
+#stream_width_default = 32
+
+# 基于系统检测到的基础值缩放流宽度(stream width)。
+# 该基础值是依据硬件队列大小决定的数据库池工作线程数量（例如 SSD 是 32，NVMe 是 64 或 128+）。
+# 此浮点数可将该宽度乘以上调或下调系数（如 1.5, 2.0 等）。最大结果不可超出 pool 队列的大小（参见：db_pool_queue_mult），
+# 任何更大的值都会使 tokio task 停滞。同样，也能向下缩放此值（例如 0.5）以提高许多用户的响应速度，但这是以降低单个请求的吞吐量为代价的。
+#
+# 将该值设为 0.0 则把流宽度固定为 stream_width_default 的值。默认比例系数为 1.0 以匹配系统检测到的能力。
+#
+#stream_width_scale = 1.0
+
+# 设定初始的放大因子。这控制了每个 pool worker 的请求批次大小，从而成倍增加了每个流的吞吐量。
+# 它的值稍微独立于特定的硬件特征，并可显著大于任何的线程数或队列大小。
+# 这是因为每条数据库查询都可能需要好几次的索引查找，故一批里发出的多个查询可以彼此独立前进的同时，
+# 有望共享着被缓存或没被缓存的索引及数据块。提交极大的批次对减低复杂性也是有好处的。
+# 它的最大值是 32768，但仍建议配备足够硬件支持该设置。
+#
+#stream_amplification = 1024
+
+# 发送任务工作线程数量；确定发送方并行度。默认为 '0' 表示该值将在内部计算以确认，很可能会贴合 tokio 工作线程的数量或者是 CPU 核心数等。
+# 若设非零值将覆盖这一决定机制。
+#
+#sender_workers = 0
+
+# 启用监听套接字；可设置为 false 以禁用监听。此选项仅适用于开发者和诊断目的。
+#
+#listening = true
+
+# 在支持的平台上，当服务器收到 SIGUSR1 信号时，允许重新加载配置。
+#
+#config_reload_signal = true
+
+# 允许搜索引擎或网络爬虫抓取(索引)在 `/_continuwuity/` 目录下提供的 Continuwuity 内置网页。
+#
+#allow_web_indexing = false
+
+[global.tls]
+
+# 有效的 TLS 证书文件的路径。
+#
+# 示例: "/path/to/my/certificate.crt"
+#
+#certs =
+
+# 有效的 TLS 证书私钥路径。
+#
+# 示例: "/path/to/my/certificate.key"
+#
+#key =
+
+# 是否监听并允许 HTTP 与 HTTPS 的双协议连接 (不安全！)
+#
+#dual_protocol = false
+
+[global.well_known]
+
+# 客户端 well-known 文件将提供的服务器 URL。此处不应包含端口，而应仅仅是一个有效的 HTTPS URL。
+#
+# 示例: "https://matrix.example.com"
+#
+#client =
+
+# 带有特定端口，且服务器 well-known 文件将要下发的服务器基础域。这里末尾应该包含端口并且不应该是一个 URL。
+#
+# 示例: "matrix.example.com:443"
+#
+#server =
+
+# 指向服务器支持页面的 URL，将作为 MSC1929 服务器支持端点（位于 /.well-known/matrix/support）的一部分来提供。
+# 将与所有联系信息一起被包含在内。
+#
+#support_page =
+
+# 位于此服务器名称的可用策略服务器的 ed25519 公钥。必须是未经填充 (unpadded) 的 base64。
+#
+#policy_server_public_key =
+
+# 服务器技术支持联系人的角色字符串，作为 MSC1929 服务器支持端点（位于 /.well-known/matrix/support）的一部分进行提供。
+#
+#support_role = "m.role.admin"
+
+# 服务器支持联系人的电子邮件地址，将作为 MSC1929 服务器支持端点的一部分被下发。
+# 如果指定了 support_mxid，这将会与其一起使用。
+#
+#support_email =
+
+# 服务器支持联系人的 Matrix ID，将作为 MSC1929 服务器支持端点的一部分被下发。
+# 如果指定了 support_email，这将会与其一起使用。
+#
+# 如果没有指定电子邮件或 mxid，所有的服务器管理员都将被列出。
+#
+#support_mxid =
+
+# 服务器支持联系人的 PGP 密钥 URI，作为 MSC1929 服务器支持端点的一部分提供。
+#
+#support_pgp_key =
+
+[global.matrix_rtc]
+
+# 通过 MSC4143 RTC 传输端点（在 `/_matrix/client/v1/rtc/transports`）提供的一系列 MatrixRTC 中心（传输节点）。
+# 如果您正准备搭建 livekit，您可能想要这样配置：
+# ```toml
+# [global.matrix_rtc]
+# foci = [
+#     { type = "livekit", livekit_service_url = "https://livekit.example.com" },
+# ]
+# ```
+#
+# 如需禁用，将此设置为一个空的数组 (`[]`)。
+#
+#foci = []
+
+#[global.antispam]
+
+#[global.antispam.meowlnir]
+
+# 连接到 Meowlnir 的基本 URL（在 /_meowlnir/antispam 之前）。
+#
+# 示例: "http://127.0.0.1:29339"
+#
+#base_url =
+
+# 在 antispam->secret 中定义的身分验证密钥。是 continuwuity 想要与 Meowlnir 对话必需项。
+#
+#secret =
+
+# 用于向其发送请求的管理房间
+#
+#management_room =
+
+# 如果启用，所有联邦加入操作的尝试（既包括联邦的也包括本地的）都需要经过 Meowlnir 的反垃圾邮件审查(anti-spam checks)。
+#
+# 默认情况，只会审查针对包含 `fi.mau.spam_checker` 受限加入规则(restricted join rule)的房间的加入尝试。
+#
+#check_all_joins = false
+
+#[global.antispam.draupnir]
+
+# 连接到 Draupnir 的基本 URL（在 /api/ 之前）。
+#
+# 示例: "http://127.0.0.1:29339"
+#
+#base_url =
+
+# web->synapseHTTPAntispam->authorization 中定义的身分验证密钥。
+#
+#secret =
+
+#[global.smtp]
+
+# 将用于连接邮件服务器的 `smtp://` URI。
+# 取消注释 [global.smtp] 组并设置此选项可启用依赖于发送邮件能力的功能（例如，自助密码重置）。
+#
+# 对于大多数现代邮件服务器，URI 的格式如下所示：
+# 	`smtps://username:password@hostname:port`
+# 请注意您需要将用户名和密码进行 URL 编码。如果您的用户名*就是*电子邮件地址本身，请将 `@` 替换为 `%40`。
+#
+# 关于可接受的 URI 语法的指南，请参阅 Lettre 的文档：
+# https://docs.rs/lettre/latest/lettre/transport/smtp/struct.AsyncSmtpTransport.html#method.from_url
+#
+#connection_uri =
+
+# 发送邮件的出站地址。
+#
+# 有关语法指南，请参见 https://datatracker.ietf.org/doc/html/rfc2822#section-3.4
+#
+# ...或者如果由于某种原因您不想看 RFC，可以这样：
+# - `Name <address@domain.org>` 指定发件人姓名
+# - `address@domain.org` 不使用名字
+#
+#sender =
+
+# 是否允许使用电子邮件地址进行公开注册。
+#
+# 请注意，如果启用此选项，任何人都可以仅使用电子邮件地址注册一个帐户。
+#
+# 如果设置了此选项或 `require_email_for_token_registration`，用户将无法删除其电子邮件地址。
+#
+#require_email_for_registration = false
+
+# 是否要求通过注册令牌(registration token)进行注册的用户也提供电子邮件地址。此选项独立于 `require_email_for_registration`。
+#
+#require_email_for_token_registration = false
+
+#[global.registration_terms]
+
+# 随策略文件一起发送给客户端的语言代码。
+#
+#language = "en"
+
+# 用户在注册帐户时必须同意的策略文档，例如服务条款及条件或隐私策略。
+#
+# 示例:
+# ```ignore
+# [global.registration_terms.documents]
+# privacy_policy = { name = "Privacy Policy", url = "https://homeserver.example/en/privacy_policy.html" }
+# ```
+#
+#documents =
+
+#[global.oauth]
+
+# 要使用的 OAuth 兼容模式。
+#
+# - "disabled": OAuth 将不可用。用户只能使用旧版身份验证登录。
+# - "hybrid": OAuth 和传统身份验证均可用。某些客户端可能只选择使用其中一种。
+# - "exclusive": 仅 OAuth 可用。需要旧版验证的客户端将无法登录。
+#
+#compatibility_mode = "hybrid"
+
+#[global.oauth.oidc]
+# 取消注释该部分将启用 Continuwuity 对使用符合 OpenID Connect 的身份提供商 (IdP) 对用户进行身份验证的支持。
+# 这通常被称为“委托身份验证 (delegated authentication)”。
+#
+# 重要说明：当委托身份验证处于活跃状态时，Continuwuity 的表现将等同于
+# `global.oauth.compatibility_mode` 设置为 `exclusive`。不支持 OAuth 登录（也称 "next-gen auth"/次世代认证）的 Matrix 客户端
+# 在委托身份验证被激活时将无法登录。
+
+
+# OIDC 的颁发者 URL。Continuwuity 将利用 OpenID Connect Discovery 机制
+# 从此 URL 自动拉取身份提供商的元数据。一般来讲，这应该设置为您的 IdP 运行的基础域名。
+#
+#discovery_url =
+
+# Continuwuity 与身份提供商通信时所用的 OAuth Client ID。
+#
+#client_id =
+
+# Continuwuity 与身份提供商通信时所用的 OAuth Client Secret（客户端密码）。
+#
+#client_secret =
+
+# Continuwuity 将从中读取 Client Secret 的文件路径。
+# 如果设置了此选项，其将覆盖 `client_secret` 的设置。
+#
+# 如果该文件无法读取，服务器将启动失败。
+#
+#client_secret_file =
+
+# Continuwuity 需要向 IDP 额外请求的范围 (scopes)。在访问特定声明(claims)时可能有必要用到。Continuwuity 始终会请求 `openid` scope。
+#
+#additional_scopes = []
+
+# 首次登录时是否提示用户选择并输入本地部分(localpart，即 @ 后，: 之前那一段名字)。
+# 如果该值为 `false`，Continuwuity 将试图使用 `preferred_username_claim` 的值（见下方配置项）
+# 作为该用户的 localpart。若缺乏此 claim 或这个 claim 不属于有效的 localpart，则身份验证将会失败。
+#
+#prompt_for_localpart = true
+
+# 当 `prompt_for_localpart` 为 false 时，被用于代表用户 localpart 的声明。
+#
+#preferred_username_claim = "preferred_username"
+
+# 哪个声明(claim)将会被用来配置用户的邮箱地址（可以是在初始注册时，也可以是依据 `profile_key_import_mode` 的配置而每一次的登陆时生效）。
+# Continuwuity 默认假定 IDP 已经处理好并验证了该用户确切掌握着它所提供的那一个电子信箱地址。
+#
+# 如果没有正确配置 SMTP，此配置无任何作用。
+#
+# 若设置了此项，且 `profile_key_import_mode` 被设置为了 `on_login`，
+# 用户将不被允许由自己更改其电子邮箱。
+#
+#email_claim = "email"
+
+# 定义从 IDP 那里传回的各种声明(claims)将怎样映射成为用户个人的资料信息(profile data)。
+# 依据 `profile_key_import_mode` 的设置（见下方）：在用户首次注册或是随后每次的登录过程中，各个包含在该参数“键名”内的那一项个人资料信息字段值将被设定为来自“对应值”指定的那条声明的值。
+#
+# 针对部分特定房间所独自配置覆盖的用户显示名与头像将保留在此导入流程中而不被覆盖。
+#
+# 安全提示：如果配置了 `avatar_url` 字段的映射，Continuwuity 会对对应 claim 里包含的那个 URL 发起一次 HTTP GET 请求，并将返回的文件当作用户的头像配置好。
+# 因此您要务必确保：别让用户有办法随意在这个建立映射关系了的声明值内胡乱填写为某个随意的 URL。
+#
+#profile_key_map = { displayname = "name" }
+
+# 决定从 IDP 的声明导入各类资料数据项（profile keys）的时机与频率。
+#
+# - "on_registration": 所列的所有 keys 只导入一次，这发生在该用户第一次登录，并随之生成其影子帐户之时。
+# - "on_login": 用户每次登录之时都会进行所列数据的导入更新动作。另外：用户也将无法通过任何 Matrix 客户端手动去编修(编辑)包含并列在此的任意数据。
+#
+#profile_key_import_mode = "on_registration"
