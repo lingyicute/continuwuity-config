@@ -1676,13 +1676,13 @@ allow_public_room_directory_over_federation = false
 #
 # 示例: "/path/to/my/certificate.crt"
 #
-#certs =
+certs = "/home/li/matrix/cert.crt"
 
 # 有效的 TLS 证书私钥路径。
 #
 # 示例: "/path/to/my/certificate.key"
 #
-#key =
+key = "/home/li/matrix/cert.key"
 
 # 是否监听并允许 HTTP 与 HTTPS 的双协议连接 (不安全！)
 #
